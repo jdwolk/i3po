@@ -1,0 +1,14 @@
+<service name="DefinitionService">
+    <description>
+        UMLS-based definition service
+    </description>
+
+    <parameter name="ServiceClass">
+    	i3po.inf191.axis2.DefinitionService
+	</parameter>
+
+    <operation name="icd9ToDefinitionRequest">
+        <messageReceiver 
+class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+</service>
