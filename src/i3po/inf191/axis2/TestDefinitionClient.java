@@ -2,7 +2,8 @@ package i3po.inf191.axis2;
 
 import java.util.Iterator;
 
-import javax.xml.stream.XMLStreamException;
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -18,6 +19,32 @@ public class TestDefinitionClient {
              new EndpointReference("http://localhost:8080/axis2/services/DefinitionService");
 
         public static OMElement definitionPayload() {
+        	
+        	OMFactory fac = OMAbstractFactory.getOMFactory();
+            OMNamespace omNs = fac.createOMNamespace(
+            		"http://www.i2b2.org/xsd/hive/msg/1.1/", "i2b2");
+            OMElement request = fac.createOMElement("request", omNs);
+            
+            OMElement msgHeader = fac.createOMElement(new QName("message_header"));
+            msgHeader.addChild(fac.createOMText(msgHeader, "Hi"));
+            
+            OMElement rqstHeader = fac.createOMElement(new QName("request_header"));
+            rqstHeader.addChild(fac.createOMText(rqstHeader, "There"));
+            
+            OMElement msgBody = fac.createOMElement(new QName("message_body"));
+            OMElement operation = fac.createOMElement("icd9ToDefinitionRequest", omNs);
+            operation.addChild(fac.createOMText(operation, "This is where an operation argument would go"));
+            msgBody.addChild(operation);
+            
+            request.addChild(msgHeader);
+            request.addChild(rqstHeader);
+            request.addChild(msgBody);
+            
+            return request;
+            
+            
+        	
+        	/*
             OMFactory fac = OMAbstractFactory.getOMFactory();
             OMNamespace omNs = fac.createOMNamespace(
             		"http://i3po.inf191.com", "icd9Todef");
@@ -26,6 +53,8 @@ public class TestDefinitionClient {
             value.addChild(fac.createOMText(value, "Hi?"));
             method.addChild(value);
             return method;
+            */
+            
         }
 
         public static void main(String[] args) {
@@ -48,7 +77,7 @@ public class TestDefinitionClient {
                 }
 
             } catch (Exception e) { //(XMLStreamException e) {
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
         }
     
