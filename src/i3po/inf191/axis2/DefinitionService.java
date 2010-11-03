@@ -1,7 +1,10 @@
 package i3po.inf191.axis2;
 
-import i3po.inf191.delegate.ICD9toDefinitionRequestDelegate;
-import i3po.inf191.delegate.RequestHandlerDelegate;
+import i3po.inf191.delegate.ICD9toDefinitionHandler;
+import i3po.inf191.delegate.ICD9toDefinitionDelegate;
+import i3po.inf191.delegate.RequestDelegate;
+
+import edu.harvard.i2b2.common.util.jaxb.JAXBUtilException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -13,39 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.StringReader;
-import java.util.logging.*;
 
 public class DefinitionService {	
-
-	/*
-	public OMElement icd9ToDefinitionRequest(OMElement icd9Element) 
-	throws XMLStreamException {
-		assert (icd9Element != null);
-		icd9Element.build();
-		icd9Element.detach();
-
-		String rootName = icd9Element.getLocalName();
-		Logger.getLogger(getClass().getName()).info(
-				"Inside icd9ToDefinitionRequest; rootname=" + rootName);
-
-		OMElement childElement = icd9Element.getFirstElement();
-		Logger.getLogger(getClass().getName()).info(
-				"REQUEST:\n" + icd9Element.toString());
-
-		OMFactory fac = OMAbstractFactory.getOMFactory();
-		OMNamespace omNs = fac.createOMNamespace(
-				"http://i3po.inf191.com", "icd9Todef");
-		OMElement method = fac.createOMElement("icd9ToDefinitionResponse", omNs);
-		OMElement value = fac.createOMElement("definition", omNs);
-		value.addChild(fac.createOMText(value, "Test"));
-		method.addChild(value);
-		
-		Logger.getLogger(getClass().getName()).info(
-				"MESSAGE:\n" + method.toString());
-
-		return method;
-	}
-	*/
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -59,7 +31,7 @@ public class DefinitionService {
 	 *  @param icd9element
 	 *  @return OMElement
 	 */
-	public OMElement icd9ToDefinitionRequest(OMElement icd9Element) {		
+	public OMElement icd9ToDefinitionRequest(OMElement icd9Element) {
 		if (icd9Element == null) {
 			log.error("icd9element was null");
 			return null;
@@ -67,23 +39,24 @@ public class DefinitionService {
 		}
 		
 		System.out.println("Inside the definition request " + icd9Element);
-		log.debug("Inside setfinder request " + icd9Element);
-		return handleRequest(ICD9_TO_DEF_REQUEST, icd9Element);
+		log.info("Inside the defintion request " + icd9Element);
+		return delegateRequest(ICD9_TO_DEF_REQUEST, icd9Element);
 	}
 
+
 	
-	private OMElement handleRequest(String requestType, OMElement request) {
-		RequestHandlerDelegate requestHandlerDelegate = null;
+	private OMElement delegateRequest(String requestType, OMElement request) {
+		RequestDelegate delegate = null;
+		log.info("Inside handleRequest for " + requestType);
 
 		if (requestType.equals(ICD9_TO_DEF_REQUEST)) {
-			log.debug("Inside handleRequest for DefinitionService");
-			requestHandlerDelegate = new ICD9toDefinitionRequestDelegate();
+			log.info("Inside handleRequest for DefinitionService");
+			delegate = new ICD9toDefinitionDelegate();
 		}
 		OMElement returnElement = null;
 		try {
-			// call delegate's handleRequest function
-			String response = requestHandlerDelegate.handleRequest(request.toString());
-			log.info("Response in service" + response);
+			String response = delegate.delegateRequest(request.toString());
+			log.info("Response in service " + response);
 			returnElement = buildOMElementFromString(response);
 		} catch (XMLStreamException e) {
 			log.error("xml stream exception: " + e);
@@ -102,6 +75,6 @@ public class DefinitionService {
 		StAXOMBuilder builder = new StAXOMBuilder(reader);
 		OMElement element = builder.getDocumentElement();
 		return element;
-	}	
+	}
 
 }

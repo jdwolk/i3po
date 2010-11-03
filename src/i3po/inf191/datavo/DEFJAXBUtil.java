@@ -24,13 +24,7 @@ public class DEFJAXBUtil {
 	@SuppressWarnings("unchecked")
 	public static edu.harvard.i2b2.common.util.jaxb.JAXBUtil getJAXBUtil() {
 		if (jaxbUtil == null) {
-			String[] jaxbPackageNameArray = {"edu.harvard.i2b2.crc.datavo.i2b2message",
-											"edu.harvard.i2b2.crc.datavo.pdo",
-											"edu.harvard.i2b2.crc.datavo.pdo.query",
-											"edu.harvard.i2b2.crc.datavo.setfinder.query",
-											"edu.harvard.i2b2.crc.datavo.pm",
-											"edu.harvard.i2b2.crc.datavo.ontology",
-											"edu.harvard.i2b2.crc.datavo.i2b2result"};
+			String[] jaxbPackageNameArray = {"edu.harvard.i2b2.datavo.i2b2message"};
 			jaxbUtil = new edu.harvard.i2b2.common.util.jaxb.JAXBUtil(
 					jaxbPackageNameArray);
 		}
