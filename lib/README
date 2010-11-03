@@ -1,0 +1,2 @@
+The included i2b2Common-core.jar MUST be included in the equivalent of the web server's
+/lib directory, as well as in the referenced libraries for your project.

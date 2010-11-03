@@ -41,7 +41,7 @@ public class TestDefinitionClient {
             
             OMElement msgBody = fac.createOMElement(new QName("message_body"));
             OMElement operation = fac.createOMElement("icd9ToDefinitionRequest", omNs);
-            operation.addChild(fac.createOMText(operation, "This is where an operation argument would go"));
+            operation.addChild(fac.createOMText(operation, "This is where a request argument would go"));
             msgBody.addChild(operation);
             
             request.addChild(msgHeader);

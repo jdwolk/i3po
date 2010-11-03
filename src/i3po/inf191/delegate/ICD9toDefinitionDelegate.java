@@ -37,7 +37,12 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 			JAXBElement jaxbElement = jaxbUtil.unMashallFromString(requestXml);
 			RequestMessageType requestMessageType = (RequestMessageType) jaxbElement.getValue();
 			BodyType bodyType = requestMessageType.getMessageBody();
-
+						
+			/* This is the way we WILL do it
+			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler();
+			BodyType bodyType = handler.handleRequest();
+			*/
+			
 			if (bodyType == null) {
 				log.error("null value in body type");
 				throw new I2B2Exception("null value in body type");
