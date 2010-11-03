@@ -3,12 +3,19 @@ i3po dictionary tool for i2b2
 
 (Give some cool explanation here)
 
-Deployment:
+JD's Lazy I-don't-wanna-install-ide-plugins-for-axis2-deployment Deployment Strategy
+
 	Currently using Axis2 via Tomcat. To deploy, go to axis2 directory of
-	/bin and use jar -cvf DefinitionService.aar ./* to create the service.
-	Move the DefinitionService.aar to <APACHE_HOME>/webapps/axis2/WEB-INF/
-	services/. Copy all .class files in /bin to appropriate places in
-	directory structure under /opt/apache-tomcat-7.0.4/webapps/axis2/WEB-INF/
-	classes/. Restart Tomcat; services should be up. You can test the
-	current service by running the java test (TestDefinitionClient.java)
+	/bin and 'jar -cvf DefinitionService.aar ./*' to create the service.
+	Move the DefinitionService.aar to your <APACHE_HOME>/webapps/axis2/WEB-INF/
+	services/ directory. Copy all .class files in /bin to appropriate places in
+	directory structure under <TOMCAT_HOME>/webapps/axis2/WEB-INF/
+	classes/ directory (i.e. 'cp -R ./* $APACHE_HOME/webapps/axis2/
+	WEB-INF/classes/'). Restart Tomcat and services should be up. You can test the
+	current service by running the java test (TestDefinitionClient.java).
+	
+	I've included a deploy.sh that accomplishes the above, though it's specific to
+	my directory structure. It'll stay that way until someone wants to generalize 
+	it by scripting it in python/ruby/perl/brainfuck/java, etc. (java? seriously, 
+	who scripts in java?)
 
