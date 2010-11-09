@@ -19,25 +19,86 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public abstract class DEFDAO {
+	protected final Log log = LogFactory.getLog(getClass());
+
 	
-	//private DataSource datasource = null;
-	private static Connection conn = null;
+	protected String connectionString = "jdbc:mysql://localhost/umls?" +
+	".&user=inf191&password=i2b2_wtf";
 	
-	public DEFDAO() {}
+	private DataSource datasource = null;
+	protected Connection conn = null;
+	
+	public DEFDAO() {
+		establishDBConnection();
+	}
 	
 	public DEFDAO(String connectionString) {
-		establishDBConnection(connectionString);
+		this.connectionString = connectionString;
+		establishDBConnection();
 	}
 	
 	//TODO remove once steps described above are in place
-	private void establishDBConnection(String connectionURL)
+	private void establishDBConnection()
+	{
+			Context initCtx = null;
+			Context envCtx = null;
+
+			try {
+				initCtx = new InitialContext();
+			} catch (NamingException e) {
+				System.out.println("InitContext Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			try {
+				envCtx = (Context) initCtx.lookup("java:comp/env");
+			} catch (NamingException e) {
+				System.out.println("envContext Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			try {
+				log.info("ENVIRONMENT: #elements = " + envCtx.getEnvironment().size());
+				while(envCtx.getEnvironment().keys().hasMoreElements()) {
+					log.info("\t" + envCtx.getEnvironment().keys().nextElement());
+				}
+				
+				
+				datasource = (DataSource) envCtx.lookup("jdbc/DB");
+			} catch (NamingException e) {
+				System.out.println("DataSource Exception : " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			try {
+				conn = datasource.getConnection();
+			} catch (SQLException e) {
+				System.out.println("SQLException while trying to get connection : "
+						+ e.getMessage());
+				e.printStackTrace();
+			}
+
+			assert conn!= null && datasource != null;
+		}
+
+	
+	//TODO remove once steps described above are in place
+	private void establishLocalDBConnection()
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("JDBC loaded ok\n");
-			conn = DriverManager.getConnection(connectionURL);
+			//System.out.println("JDBC loaded ok\n");
+			conn = DriverManager.getConnection(connectionString);
 		}
 		catch(ClassNotFoundException cnf)
 		{
@@ -71,6 +132,10 @@ public abstract class DEFDAO {
 			throw new I2B2Exception("Could not get datasource connection", i2b2Ex);
 		}
 		*/
+	}
+	
+	public void setConnectionString(String connectionString) {
+		this.connectionString = connectionString;
 	}
 	
 }

@@ -18,4 +18,7 @@ JD's Lazy I-don't-wanna-install-ide-plugins-for-axis2-deployment Deployment Stra
 	my directory structure. It'll stay that way until someone wants to generalize 
 	it by scripting it in python/ruby/perl/brainfuck/java, etc. (java? seriously, 
 	who scripts in java?)
+	
+TODO
+	Remember to include MySQL JDBC connector if running on a local machine
 

@@ -57,7 +57,7 @@ public class DefinitionService {
 		try {
 			String response = delegate.delegateRequest(request.toString());
 			log.info("Response in service " + response);
-			returnElement = buildOMElementFromString(response);
+			returnElement = AxisUtils.buildOMElementFromString(response);
 		} catch (XMLStreamException e) {
 			log.error("xml stream exception: " + e);
 		} catch (Throwable e) {
@@ -65,16 +65,4 @@ public class DefinitionService {
 		}
 		return returnElement;
 	}
-	
-	
-	private OMElement buildOMElementFromString(String xmlString)
-		throws XMLStreamException {
-		XMLInputFactory xif = XMLInputFactory.newInstance();
-		StringReader strReader = new StringReader(xmlString);
-		XMLStreamReader reader = xif.createXMLStreamReader(strReader);
-		StAXOMBuilder builder = new StAXOMBuilder(reader);
-		OMElement element = builder.getDocumentElement();
-		return element;
-	}
-
 }

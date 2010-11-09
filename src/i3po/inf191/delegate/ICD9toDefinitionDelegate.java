@@ -4,7 +4,9 @@ import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.i2b2.xsd.cell.def.RequestType;
 
+import edu.harvard.i2b2.common.util.jaxb.JAXBUnWrapHelper;
 import edu.harvard.i2b2.common.util.jaxb.JAXBUtil;
 import edu.harvard.i2b2.datavo.i2b2message.RequestMessageType;
 import edu.harvard.i2b2.datavo.i2b2message.BodyType;
@@ -27,21 +29,24 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 	 * @see edu.harvard.i2b2.RequestDelegate.delegate.RequestHandlerDelegate#handleRequest(java.lang.String)
 	 */
 	public String delegateRequest(String requestXml) throws I2B2Exception {
-		System.out.println("Inside handleRequest for ICD9toDefinitionRequestDelegate;\n" +
-				"requestXml:\n" + requestXml);
-		//PdoQryHeaderType headerType = null;
+		log.info("Inside delegateRequest for ICD9toDefinitionDelegate");
 		String response = null;
 		JAXBUtil jaxbUtil = DEFJAXBUtil.getJAXBUtil();
+		JAXBUnWrapHelper helper = new JAXBUnWrapHelper();
 
 		try {
 			JAXBElement jaxbElement = jaxbUtil.unMashallFromString(requestXml);
 			RequestMessageType requestMessageType = (RequestMessageType) jaxbElement.getValue();
-			BodyType bodyType = requestMessageType.getMessageBody();
+			BodyType reqBodyType = requestMessageType.getMessageBody();
+			log.info("BodyType.getAny() -> " + reqBodyType.getAny());
+			RequestType reqType = (RequestType) helper.getObjectByClass(reqBodyType.getAny(),
+					RequestType.class);
+			
+			//log.info("RequestType.getIcd9Code() -> " + reqType.getIcd9Code());
 						
-			/* This is the way we WILL do it
 			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler();
-			BodyType bodyType = handler.handleRequest();
-			*/
+			//BodyType bodyType = handler.handleRequest(reqType.getIcd9Code());
+			BodyType bodyType = handler.handleRequest("401");
 			
 			if (bodyType == null) {
 				log.error("null value in body type");

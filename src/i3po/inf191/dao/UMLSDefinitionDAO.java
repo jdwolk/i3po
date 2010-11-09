@@ -6,6 +6,14 @@ import java.sql.Statement;
 
 public class UMLSDefinitionDAO extends DEFDAO {
 	
+	public UMLSDefinitionDAO(String string) {
+		super(string);
+	}
+
+	public UMLSDefinitionDAO() {
+		super();
+	}
+
 	private ResultSet runUMLSQuery(String icd9) throws SQLException
 	{
 		Statement stmt = getConnection().createStatement();
