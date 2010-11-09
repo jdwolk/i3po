@@ -36,9 +36,9 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 
 		try {
 			JAXBElement jaxbElement = jaxbUtil.unMashallFromString(requestXml);
-			RequestMessageType requestMessageType = (RequestMessageType) jaxbElement.getValue();
-			BodyType reqBodyType = requestMessageType.getMessageBody();
-			log.info("BodyType.getAny() -> " + reqBodyType.getAny());
+			RequestMessageType requestMsgType = (RequestMessageType) jaxbElement.getValue();
+			BodyType reqBodyType = requestMsgType.getMessageBody();
+			//log.info("BodyType.getAny() -> " + reqBodyType.getAny());
 			RequestType reqType = (RequestType) helper.getObjectByClass(reqBodyType.getAny(),
 					RequestType.class);
 			
@@ -46,7 +46,7 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 						
 			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler();
 			//BodyType bodyType = handler.handleRequest(reqType.getIcd9Code());
-			BodyType bodyType = handler.handleRequest("401");
+			BodyType bodyType = handler.handleRequest("400");
 			
 			if (bodyType == null) {
 				log.error("null value in body type");

@@ -67,12 +67,6 @@ public abstract class DEFDAO {
 			}
 
 			try {
-				log.info("ENVIRONMENT: #elements = " + envCtx.getEnvironment().size());
-				while(envCtx.getEnvironment().keys().hasMoreElements()) {
-					log.info("\t" + envCtx.getEnvironment().keys().nextElement());
-				}
-				
-				
 				datasource = (DataSource) envCtx.lookup("jdbc/DB");
 			} catch (NamingException e) {
 				System.out.println("DataSource Exception : " + e.getMessage());
