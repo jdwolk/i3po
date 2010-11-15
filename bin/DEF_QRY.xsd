@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<!--<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:def="http://www.i2b2.org/xsd/cell/def/"
-    targetNamespace="http://www.i2b2.org/xsd/cell/def/">
+    targetNamespace="http://www.i2b2.org/xsd/cell/def/">-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:def="http://www.i3po/inf191/xsd/"
+    targetNamespace="http://www.i3po/inf191/xsd/">
     
     <xs:element name="message_body_example">
         <xs:complexType>

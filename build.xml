@@ -1,10 +1,11 @@
-<project basedir="." default="dist" name="PFT Cell">
+<project basedir="." default="dist" name="DEF Cell">
 
 	
 	<property name="Project" value="i3po.inf191.def" />
 	
 	<!-- ========== Executable Targets ======================================== -->
 	<property name="Name" value="DEF" />
+	<property name="package_structure" value="/i3po/inf191/" />
 	<import file="common-build.xml" />
 	
 	<!-- ========== My Init =================================================== -->
@@ -28,11 +29,10 @@
 	<target name="axis2aar" description="Create Axis2 archive file">
 		<jar compress="true" jarfile="${dist}/${Name}.aar">
 			<fileset dir="${classes}">
-				<include name="**/ws/**" />
+				<include name="**/axis2/**" />
 			</fileset>
-			<zipfileset dir="${etc}/axis2/" prefix="META-INF" includes="services.xml" />
+			<zipfileset dir="src/${package_structure}/axis2/" prefix="META-INF" includes="services.xml" />
 			<zipfileset dir="${dist}/" prefix="lib" includes="*core.jar"/>
-			<zipfileset dir="../${i2b2CommonProject}/dist/" prefix="lib" includes="*.jar"/>
 		</jar>
 	</target>
 	

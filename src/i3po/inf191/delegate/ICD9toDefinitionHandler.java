@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.axiom.om.OMElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.i2b2.xsd.cell.def.RequestType;
-import org.i2b2.xsd.cell.def.ResponseType;
+import i3po.inf191.xsd.RequestType;
+import i3po.inf191.xsd.ResponseType;
 
 import edu.harvard.i2b2.common.util.jaxb.JAXBUtil;
 import edu.harvard.i2b2.common.util.jaxb.JAXBUtilException;
@@ -42,7 +42,7 @@ public class ICD9toDefinitionHandler {
 		edu.harvard.i2b2.datavo.i2b2message.ObjectFactory of = new edu.harvard.i2b2.datavo.i2b2message.ObjectFactory();
 		BodyType bodyType = of.createBodyType();
 		
-		org.i2b2.xsd.cell.def.ObjectFactory myof = new org.i2b2.xsd.cell.def.ObjectFactory();
+		i3po.inf191.xsd.ObjectFactory myof = new i3po.inf191.xsd.ObjectFactory();
 		ResponseType response = myof.createResponseType();
 		
 		try {
