@@ -27,6 +27,9 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.harvard.i2b2.common.exception.I2B2Exception;
+import edu.harvard.i2b2.common.util.ServiceLocator;
+
 public abstract class DEFDAO {
 
 	protected final Log log = LogFactory.getLog(getClass());
@@ -126,5 +129,4 @@ public abstract class DEFDAO {
 	public void setConnectionType(CONNECTIONS type) {
 		this.connectionType = type;
 	}
-
 }

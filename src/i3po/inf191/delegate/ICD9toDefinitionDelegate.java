@@ -43,8 +43,9 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 					RequestType.class);
 			
 			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler();
+			log.info("Requested icd9 code: " + reqType.getIcd9Code());
 			BodyType bodyType = handler.handleRequest(reqType.getIcd9Code());
-			//BodyType bodyType = handler.handleRequest("400");
+			//BodyType bodyType = handler.handleRequest("403");
 			
 			if (bodyType == null) {
 				log.error("null value in body type");

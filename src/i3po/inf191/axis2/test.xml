@@ -1,15 +1,12 @@
-<i2b2:request xmlns:i2b2="http://www.i2b2.org/xsd/hive/msg/" xmlns:i3po="www.i3po.inf191.def"
-			xmlns:def="http://www.i2b2.org/xsd/cell/def/">
+<i2b2:request xmlns:def="http://www.i3po/inf191/xsd/"
+			  xmlns:i2b2="http://www.i2b2.org/xsd/hive/msg/"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://www.i3po/inf191/xsd/ ../DEF_QRY.xsd">
 	<message_header>Hi</message_header>
 	<request_header>There</request_header>
 	<message_body>
-		<!--
-		<i2b2:icd9ToDefinitionRequest>
-			<icd9code>401</icd9code>
-		</i2b2:icd9ToDefinitionRequest>
-		-->
 		<def:requestType>
-			<icd9code>401</icd9code>
+			<icd9code>405</icd9code>
 		</def:requestType>
 	</message_body>
 </i2b2:request>

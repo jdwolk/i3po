@@ -23,7 +23,8 @@ public class DEFJAXBUtil {
 			// create JAXBContexts of JAXBUtil.
 			//TODO make dynamic via Spring/configuration
 			String[] jaxbPackageNameArray = {"edu.harvard.i2b2.datavo.i2b2message",
-											 "org.i2b2.xsd.cell.def"};
+											"i3po.inf191.xsd"}; 
+											//"org.i2b2.xsd.cell.def"};
 			jaxbUtil = new JAXBUtil(
 					jaxbPackageNameArray);
 		}

@@ -22,7 +22,7 @@ public class DefinitionServiceTests {
 	}
 
 	@Test
-	public final void testIcd9ToDefinitionRequest() {
+	public void testIcd9ToDefinitionRequest() {
 		TestDefinitionClient tdc = new TestDefinitionClient();
 		service.icd9ToDefinitionRequest(tdc.definitionPayload());
 	}
