@@ -28,108 +28,103 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public abstract class DEFDAO {
+
 	protected final Log log = LogFactory.getLog(getClass());
 
-	
-	protected String connectionString = "jdbc:mysql://localhost/umls?" +
+	public enum CONNECTIONS {SERVER, LOCAL}; //consider making protected; kept so we can unit test
+	private CONNECTIONS connectionType = CONNECTIONS.SERVER; //default
+	private String connectionString = "jdbc:mysql://localhost/umls?" +
 	".&user=inf191&password=i2b2_wtf";
-	
+
 	private DataSource datasource = null;
 	protected Connection conn = null;
-	
+
 	public DEFDAO() {
 		establishDBConnection();
 	}
-	
+
 	public DEFDAO(String connectionString) {
-		this.connectionString = connectionString;
+		setConnectionString(connectionString);
 		establishDBConnection();
 	}
 	
-	//TODO remove once steps described above are in place
-	private void establishDBConnection()
-	{
-			Context initCtx = null;
-			Context envCtx = null;
-
-			try {
-				initCtx = new InitialContext();
-			} catch (NamingException e) {
-				System.out.println("InitContext Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			try {
-				envCtx = (Context) initCtx.lookup("java:comp/env");
-			} catch (NamingException e) {
-				System.out.println("envContext Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			try {
-				datasource = (DataSource) envCtx.lookup("jdbc/DB");
-			} catch (NamingException e) {
-				System.out.println("DataSource Exception : " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			try {
-				conn = datasource.getConnection();
-			} catch (SQLException e) {
-				System.out.println("SQLException while trying to get connection : "
-						+ e.getMessage());
-				e.printStackTrace();
-			}
-
-			assert conn!= null && datasource != null;
-		}
+	public DEFDAO(CONNECTIONS type) {
+		setConnectionType(type);
+		establishDBConnection();
+	}
+	
+	public DEFDAO(String connectionString, CONNECTIONS type) {
+		setConnectionString(connectionString);
+		setConnectionType(type);
+		establishDBConnection();
+	}
 
 	
-	//TODO remove once steps described above are in place
-	private void establishLocalDBConnection()
-	{
-		try
-		{
+	
+	private void establishDBConnection() {
+		if(connectionType == CONNECTIONS.SERVER)
+			establishServerDBConnection();
+		else if(connectionType == CONNECTIONS.LOCAL)
+			establishLocalDBConnection();
+		else
+			throw new RuntimeException("DB connectionType unknown in DEFDAO");
+	}
+	
+	private void establishServerDBConnection() {
+		Context initCtx = null;
+		Context envCtx = null;
+
+		try {
+			initCtx = new InitialContext();
+			envCtx = (Context) initCtx.lookup("java:comp/env");
+			datasource = (DataSource) envCtx.lookup("jdbc/DB");
+			
+			conn = datasource.getConnection();
+		}
+		catch (NamingException e) {
+			e.printStackTrace();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		assert conn!= null && datasource != null;
+	}
+
+	private void establishLocalDBConnection() {
+		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			//System.out.println("JDBC loaded ok\n");
 			conn = DriverManager.getConnection(connectionString);
 		}
-		catch(ClassNotFoundException cnf)
-		{
-			System.err.println("ClassNotFoundException: "
-					+ cnf.getMessage());
+		catch(ClassNotFoundException cnf) {
+			cnf.printStackTrace();
 		}
-		catch(SQLException e)
-		{
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	protected Connection getConnection() throws SQLException {//I2B2Exception {
+
+
+	protected Connection getConnection() throws SQLException {
 		if(conn == null) {
 			throw new SQLException("Connection has not yet been initialized; " +
-					"call DEFDAO.establishDBConnection<connectionString>)");
+			"call DEFDAO.establishDBConnection<connectionString>)");
 		}
 		else {
 			return conn;
 		}
-		/*
-		try {
-			return datasource.getConnection();
-		}
-		catch (SQLException i2b2Ex) {
-			throw new I2B2Exception("Could not get datasource connection", i2b2Ex);
-		}
-		*/
 	}
-	
+
 	public void setConnectionString(String connectionString) {
 		this.connectionString = connectionString;
 	}
 	
+	public void setConnectionType(CONNECTIONS type) {
+		this.connectionType = type;
+	}
+
 }

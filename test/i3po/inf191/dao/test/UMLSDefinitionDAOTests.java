@@ -16,7 +16,7 @@ public class UMLSDefinitionDAOTests {
 
 	@Before
 	public void setUp() throws Exception {
-		defDAO = new UMLSDefinitionDAO();
+		defDAO = new UMLSDefinitionDAO(DEFDAO.CONNECTIONS.LOCAL);
 	}
 
 	@After
