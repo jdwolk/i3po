@@ -6,7 +6,8 @@
 	<request_header>There</request_header>
 	<message_body>
 		<def:requestType>
-			<icd9code>405</icd9code>
+			<other>Element</other>
+			<icd9code>401</icd9code>
 		</def:requestType>
 	</message_body>
 </i2b2:request>

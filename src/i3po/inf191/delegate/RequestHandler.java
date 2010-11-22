@@ -6,6 +6,6 @@ public abstract class RequestHandler {
 	public RequestHandler() {}
 
 	public abstract BodyType handleRequest();
-	public abstract BodyType handleRequest(String s);
+	//public abstract BodyType handleRequest(String s);
 
 }

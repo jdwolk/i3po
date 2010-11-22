@@ -14,7 +14,7 @@ import edu.harvard.i2b2.datavo.i2b2message.StatusType;
 
 import edu.harvard.i2b2.common.exception.I2B2Exception;
 
-import i3po.inf191.datavo.I2B2MessageResponseFactory;
+import i3po.inf191.datavo.MessageFactory;
 import i3po.inf191.datavo.DEFJAXBUtil;
 
 public class ICD9toDefinitionDelegate extends RequestDelegate{
@@ -31,6 +31,12 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 	public String delegateRequest(String requestXml) throws I2B2Exception {
 		log.info("Inside delegateRequest for ICD9toDefinitionDelegate");
 		String response = null;
+		
+		if (requestXml == null) {
+            log.error("Incoming PFT request is null");
+            throw new I2B2Exception("Incoming PFT request is null");
+        }
+		
 		JAXBUtil jaxbUtil = DEFJAXBUtil.getJAXBUtil();
 		JAXBUnWrapHelper helper = new JAXBUnWrapHelper();
 
@@ -38,14 +44,12 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 			JAXBElement jaxbElement = jaxbUtil.unMashallFromString(requestXml);
 			RequestMessageType requestMsgType = (RequestMessageType) jaxbElement.getValue();
 			BodyType reqBodyType = requestMsgType.getMessageBody();
-			log.info("BodyType.getAny() -> " + reqBodyType.getAny());
 			RequestType reqType = (RequestType) helper.getObjectByClass(reqBodyType.getAny(),
 					RequestType.class);
 			
-			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler();
 			log.info("Requested icd9 code: " + reqType.getIcd9Code());
-			BodyType bodyType = handler.handleRequest(reqType.getIcd9Code());
-			//BodyType bodyType = handler.handleRequest("403");
+			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler(reqType.getIcd9Code());
+			BodyType bodyType = handler.handleRequest();
 			
 			if (bodyType == null) {
 				log.error("null value in body type");
@@ -55,7 +59,7 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 			//TODO REALLY process based on actual info in body type, message header, etc.
 			StatusType procStatus = new StatusType();
 			procStatus.setType("DONE");
-			response = I2B2MessageResponseFactory.buildResponseMessage(
+			response = MessageFactory.buildResponseMessage(
 					requestXml, procStatus, bodyType);
 			
 		}

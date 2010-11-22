@@ -24,7 +24,7 @@ public class DefinitionServiceTests {
 	@Test
 	public void testIcd9ToDefinitionRequest() {
 		TestDefinitionClient tdc = new TestDefinitionClient();
-		service.icd9ToDefinitionRequest(tdc.definitionPayload());
+		service.icd9ToDefinitionRequest(tdc.definitionPayload("/home/jordaniel/workspaces/i2b2/i3po/src/i3po/inf191/axis2/test.xml"));
 	}
 
 }
