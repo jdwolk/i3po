@@ -15,6 +15,8 @@
 
 package i3po.inf191.dao;
 
+import i3po.inf191.util.DefinitionUtil;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,40 +36,18 @@ public abstract class DEFDAO {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
-	public enum CONNECTIONS {SERVER, LOCAL}; //consider making protected; kept so we can unit test
-	private CONNECTIONS connectionType = CONNECTIONS.SERVER; //default
-	private String connectionString = "jdbc:mysql://localhost/umls?" +
-	".&user=inf191&password=i2b2_wtf";
-
+	private DefinitionUtil util = DefinitionUtil.getInstance();
 	private DataSource datasource = null;
 	protected Connection conn = null;
 
 	public DEFDAO() {
 		establishDBConnection();
 	}
-
-	public DEFDAO(String connectionString) {
-		setConnectionString(connectionString);
-		establishDBConnection();
-	}
-	
-	public DEFDAO(CONNECTIONS type) {
-		setConnectionType(type);
-		establishDBConnection();
-	}
-	
-	public DEFDAO(String connectionString, CONNECTIONS type) {
-		setConnectionString(connectionString);
-		setConnectionType(type);
-		establishDBConnection();
-	}
-
-	
 	
 	private void establishDBConnection() {
-		if(connectionType == CONNECTIONS.SERVER)
+		if(util.getConnectionType() ==  DefinitionUtil.CONNECTIONS.SERVER)
 			establishServerDBConnection();
-		else if(connectionType == CONNECTIONS.LOCAL)
+		else if(util.getConnectionType() == DefinitionUtil.CONNECTIONS.LOCAL)
 			establishLocalDBConnection();
 		else
 			throw new RuntimeException("DB connectionType unknown in DEFDAO");
@@ -98,7 +78,7 @@ public abstract class DEFDAO {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			//System.out.println("JDBC loaded ok\n");
-			conn = DriverManager.getConnection(connectionString);
+			conn = DriverManager.getConnection(util.getConnectionString());
 		}
 		catch(ClassNotFoundException cnf) {
 			cnf.printStackTrace();
@@ -120,13 +100,5 @@ public abstract class DEFDAO {
 		else {
 			return conn;
 		}
-	}
-
-	public void setConnectionString(String connectionString) {
-		this.connectionString = connectionString;
-	}
-	
-	public void setConnectionType(CONNECTIONS type) {
-		this.connectionType = type;
 	}
 }

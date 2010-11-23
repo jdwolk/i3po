@@ -10,19 +10,6 @@ public class UMLSDefinitionDAO extends DEFDAO {
 		super();
 	}
 	
-	public UMLSDefinitionDAO(String string) {
-		super(string);
-	}
-	
-	public UMLSDefinitionDAO(CONNECTIONS type) {
-		super(type);
-	}
-	
-	public UMLSDefinitionDAO(String connectionString, CONNECTIONS type) {
-		super(connectionString, type);
-	}
-
-	
 	
 	private ResultSet runUMLSQuery(String icd9) throws SQLException
 	{

@@ -6,17 +6,38 @@ import java.sql.SQLException;
 
 import i3po.inf191.dao.DEFDAO;
 import i3po.inf191.dao.UMLSDefinitionDAO;
+import i3po.inf191.delegate.ICD9toDefinitionHandler;
+import i3po.inf191.util.DefinitionUtil;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class UMLSDefinitionDAOTests {
+	
 	private UMLSDefinitionDAO defDAO = null;
+	
+	static DefinitionUtil.CONNECTIONS oldConnType = 
+		DefinitionUtil.getInstance().getConnectionType();
+	
+	ICD9toDefinitionHandler handler;
+	String icd9 = "401";
 
+	@BeforeClass
+	public static void setUpAll() throws Exception {
+		DefinitionUtil.getInstance().setConnectionType(DefinitionUtil.CONNECTIONS.LOCAL);
+	}
+	
+	@AfterClass
+	public static void restore() throws Exception {
+		DefinitionUtil.getInstance().setConnectionType(oldConnType);
+	}
+	
 	@Before
 	public void setUp() throws Exception {
-		defDAO = new UMLSDefinitionDAO(DEFDAO.CONNECTIONS.LOCAL);
+		defDAO = new UMLSDefinitionDAO();
 	}
 
 	@After
