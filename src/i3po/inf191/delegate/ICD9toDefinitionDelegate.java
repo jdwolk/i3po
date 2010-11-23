@@ -16,6 +16,7 @@ import edu.harvard.i2b2.common.exception.I2B2Exception;
 
 import i3po.inf191.datavo.MessageFactory;
 import i3po.inf191.datavo.DEFJAXBUtil;
+import i3po.inf191.messages.RequestTypeMessage;
 
 public class ICD9toDefinitionDelegate extends RequestDelegate{
 	/** log **/
@@ -39,13 +40,9 @@ public class ICD9toDefinitionDelegate extends RequestDelegate{
 		
 		JAXBUtil jaxbUtil = DEFJAXBUtil.getJAXBUtil();
 		JAXBUnWrapHelper helper = new JAXBUnWrapHelper();
-
+		
 		try {
-			JAXBElement jaxbElement = jaxbUtil.unMashallFromString(requestXml);
-			RequestMessageType requestMsgType = (RequestMessageType) jaxbElement.getValue();
-			BodyType reqBodyType = requestMsgType.getMessageBody();
-			RequestType reqType = (RequestType) helper.getObjectByClass(reqBodyType.getAny(),
-					RequestType.class);
+			RequestType reqType = new RequestTypeMessage(requestXml).getRequestType();
 			
 			log.info("Requested icd9 code: " + reqType.getIcd9Code());
 			ICD9toDefinitionHandler handler = new ICD9toDefinitionHandler(reqType.getIcd9Code());

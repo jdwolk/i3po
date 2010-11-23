@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:message_body_example xmlns:ns2="http://www.i2b2.org/xsd/cell/def/">
-    <ns2:definition_request>
-        <icd9code>307.5</icd9code>
-    </ns2:definition_request>
-</ns2:message_body_example>
