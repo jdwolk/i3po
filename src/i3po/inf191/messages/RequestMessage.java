@@ -11,7 +11,6 @@ import edu.harvard.i2b2.datavo.i2b2message.MessageHeaderType;
 import edu.harvard.i2b2.datavo.i2b2message.RequestMessageType;
 
 import i3po.inf191.datavo.DEFJAXBUtil;
-import i3po.inf191.xsd.RequestType;
 
 /**
  * Abstract base class for other message types. Handles initial
@@ -39,6 +38,11 @@ public abstract class RequestMessage {
 		} catch (JAXBUtilException e) {
 			log.error(e.getMessage(), e);
 			throw new I2B2Exception("Umarshaller error: " + e.getMessage() +
+					requestXml, e);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new I2B2Exception("Unspecified error: " + e.getMessage() +
 					requestXml, e);
 		}
 	}

@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 import javax.xml.namespace.QName;
@@ -17,8 +16,6 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.OMText;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.Constants;
@@ -46,7 +43,7 @@ public class TestDefinitionClient {
 		rqstHeader.addChild(fac.createOMText(rqstHeader, "There"));
 
 		OMElement msgBody = fac.createOMElement(new QName("message_body"));
-		OMElement operation = fac.createOMElement("icd9ToDefinitionRequest", omNs);
+		OMElement operation = fac.createOMElement("basecodeToDefinitionRequest", omNs);
 		//operation.addChild(fac.createOMText(operation, "This is where a request argument would go"));
 		OMElement definition = fac.createOMElement(new QName("definition"));
 		definition.setText("401");
@@ -109,7 +106,7 @@ public class TestDefinitionClient {
 			Options options = new Options();
 			options.setTo(targetEPR);
 			options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
-			options.setAction("icd9ToDefinitionRequest"); //MUY IMPORTANTE!!!
+			options.setAction("basecodeToDefinitionRequest"); //MUY IMPORTANTE!!!
 
 			ServiceClient sender = new ServiceClient();
 			sender.setOptions(options);
@@ -118,8 +115,10 @@ public class TestDefinitionClient {
 			Iterator<OMElement> children = result.getFirstChildWithName(new QName("message_body")).getChildElements();
 			for(Iterator<OMElement> i = children; children.hasNext(); ) {
 				OMElement next = i.next();
-				if(next.getLocalName().equals("responseType")) {
-					System.out.println(next.getFirstElement().getText());
+				if(next.getLocalName().equals("defResponse")) {
+					for(Iterator<OMElement> j = next.getChildElements(); j.hasNext(); ) {
+						System.out.println(j.next().getText());
+					}
 				}
 			}
 			

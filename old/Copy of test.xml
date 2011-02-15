@@ -5,8 +5,8 @@
 	<message_header>Hi</message_header>
 	<request_header>There</request_header>
 	<message_body>
-		<def:defRequest>
-			<basecode>ICD9:401</basecode>
-		</def:defRequest>
+		<def:requestType>
+			<basecode>401</basecode>
+		</def:requestType>
 	</message_body>
 </i2b2:request>

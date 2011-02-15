@@ -24,10 +24,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;choice>
- *         &lt;element ref="{http://www.i3po/inf191/xsd/}defRequest"/>
- *         &lt;element ref="{http://www.i3po/inf191/xsd/}defResponse"/>
- *       &lt;/choice>
+ *       &lt;sequence>
+ *         &lt;element name="title" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="basecode" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -37,63 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "defRequest",
-    "defResponse"
+    "title",
+    "basecode"
 })
-@XmlRootElement(name = "message_body_example")
-public class MessageBodyExample {
+@XmlRootElement(name = "defRequest")
+public class DefRequest {
 
-    @XmlElement(namespace = "http://www.i3po/inf191/xsd/")
-    protected DefRequest defRequest;
-    @XmlElement(namespace = "http://www.i3po/inf191/xsd/")
-    protected DefResponse defResponse;
+    @XmlElement(required = true)
+    protected String title;
+    @XmlElement(required = true)
+    protected String basecode;
 
     /**
-     * Gets the value of the defRequest property.
+     * Gets the value of the title property.
      * 
      * @return
      *     possible object is
-     *     {@link DefRequest }
+     *     {@link String }
      *     
      */
-    public DefRequest getDefRequest() {
-        return defRequest;
+    public String getTitle() {
+        return title;
     }
 
     /**
-     * Sets the value of the defRequest property.
+     * Sets the value of the title property.
      * 
      * @param value
      *     allowed object is
-     *     {@link DefRequest }
+     *     {@link String }
      *     
      */
-    public void setDefRequest(DefRequest value) {
-        this.defRequest = value;
+    public void setTitle(String value) {
+        this.title = value;
     }
 
     /**
-     * Gets the value of the defResponse property.
+     * Gets the value of the basecode property.
      * 
      * @return
      *     possible object is
-     *     {@link DefResponse }
+     *     {@link String }
      *     
      */
-    public DefResponse getDefResponse() {
-        return defResponse;
+    public String getBasecode() {
+        return basecode;
     }
 
     /**
-     * Sets the value of the defResponse property.
+     * Sets the value of the basecode property.
      * 
      * @param value
      *     allowed object is
-     *     {@link DefResponse }
+     *     {@link String }
      *     
      */
-    public void setDefResponse(DefResponse value) {
-        this.defResponse = value;
+    public void setBasecode(String value) {
+        this.basecode = value;
     }
 
 }

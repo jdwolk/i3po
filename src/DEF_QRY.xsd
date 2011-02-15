@@ -6,25 +6,29 @@
     <xs:element name="message_body_example">
         <xs:complexType>
             <xs:choice>
-                <xs:element ref="def:definition_request"/>
-                <xs:element ref="def:definition_response"/>
+                <xs:element ref="def:defRequest"/>
+                <xs:element ref="def:defResponse"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="definition_request" type="def:requestType"/>
-    <xs:element name="definition_response" type="def:responseType"/>
+    <xs:element name="defRequest"> 
+   		<xs:complexType >
+        	<xs:sequence>
+        		<xs:element name="title" type="xs:string"/>
+            	<xs:element name="basecode" type="xs:string"/>
+        	</xs:sequence>
+    	</xs:complexType>
+	</xs:element>
     
-    <xs:complexType name="requestType">
-        <xs:sequence>
-            <xs:element name="icd9code" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:complexType name="responseType">
-        <xs:sequence>
-            <xs:element name="definition" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="defResponse">
+    	<xs:complexType>
+        	<xs:sequence>
+        		<xs:element name="title" type="xs:string"/>
+            	<xs:element name="basecode" type="xs:string"/>
+            	<xs:element name="definition" type="xs:string"/>
+        	</xs:sequence>
+    	</xs:complexType>
+ 	</xs:element>
     
 </xs:schema>

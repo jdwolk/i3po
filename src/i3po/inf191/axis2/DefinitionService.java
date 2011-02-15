@@ -1,27 +1,20 @@
 package i3po.inf191.axis2;
 
-import i3po.inf191.delegate.ICD9toDefinitionHandler;
-import i3po.inf191.delegate.ICD9toDefinitionDelegate;
+import i3po.inf191.delegate.BasecodeToDefinitionDelegate;
 import i3po.inf191.delegate.RequestDelegate;
 
-import edu.harvard.i2b2.common.util.jaxb.JAXBUtilException;
-
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.StringReader;
 
 public class DefinitionService {	
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	private final String ICD9_TO_DEF_REQUEST = "ICD9_TO_DEF_REQUEST";
+	private final String BASECODE_TO_DEF_REQUEST = "BASECODE_TO_DEF_REQUEST";
 	
 	
 	/**
@@ -31,16 +24,15 @@ public class DefinitionService {
 	 *  @param icd9element
 	 *  @return OMElement
 	 */
-	public OMElement icd9ToDefinitionRequest(OMElement icd9Element) {
-		if (icd9Element == null) {
-			log.error("icd9element was null");
+	public OMElement basecodeToDefinitionRequest(OMElement basecodeElement) {
+		if (basecodeElement == null) {
+			log.error("basecode was null");
 			return null;
 			//TODO construct error response message, and return OMElement from buildOMElementFromString()
 		}
 		
-		System.out.println("Inside the definition request " + icd9Element);
-		log.info("Inside the defintion request " + icd9Element);
-		return delegateRequest(ICD9_TO_DEF_REQUEST, icd9Element);
+		log.info("Inside the defintion request " + basecodeElement);
+		return delegateRequest(BASECODE_TO_DEF_REQUEST, basecodeElement);
 	}
 
 
@@ -49,9 +41,9 @@ public class DefinitionService {
 		RequestDelegate delegate = null;
 		log.info("Inside handleRequest for " + requestType);
 
-		if (requestType.equals(ICD9_TO_DEF_REQUEST)) {
+		if (requestType.equals(BASECODE_TO_DEF_REQUEST)) {
 			log.info("Inside handleRequest for DefinitionService");
-			delegate = new ICD9toDefinitionDelegate();
+			delegate = new BasecodeToDefinitionDelegate();
 		}
 		OMElement returnElement = null;
 		try {

@@ -3,7 +3,7 @@ package i3po.inf191.axis2.test;
 import static org.junit.Assert.*;
 import i3po.inf191.axis2.DefinitionService;
 import i3po.inf191.axis2.TestDefinitionClient;
-import i3po.inf191.delegate.ICD9toDefinitionHandler;
+import i3po.inf191.delegate.BasecodeToDefinitionHandler;
 import i3po.inf191.util.DefinitionUtil;
 
 import org.junit.After;
@@ -41,7 +41,7 @@ public class DefinitionServiceTests {
 	@Test
 	public void testIcd9ToDefinitionRequest() {
 		TestDefinitionClient tdc = new TestDefinitionClient();
-		service.icd9ToDefinitionRequest(tdc.definitionPayload("/home/jordaniel/workspaces/i2b2/i3po/src/i3po/inf191/axis2/test.xml"));
+		service.basecodeToDefinitionRequest(tdc.definitionPayload("/home/jordaniel/workspaces/i2b2/i3po/src/i3po/inf191/axis2/test.xml"));
 	}
 
 }

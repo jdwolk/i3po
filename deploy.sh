@@ -1,3 +1,4 @@
+xjc -d ./src ./src/DEF_QRY.xsd
 cd ./bin/i3po/inf191/axis2/
 jar -cvf DefinitionService.aar ./*
 mv DefinitionService.aar /opt/apache-tomcat-7.0.4/webapps/axis2/WEB-INF/services/
