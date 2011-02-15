@@ -7,7 +7,7 @@
     	i3po.inf191.axis2.DefinitionService
 	</parameter>
 
-    <operation name="icd9ToDefinitionRequest">
+    <operation name="basecodeToDefinitionRequest">
         <messageReceiver 
 class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
     </operation>
