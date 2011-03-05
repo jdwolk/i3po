@@ -11,7 +11,6 @@ import i3po.inf191.dao.UMLSDefinitionDAO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import i3po.inf191.util.DefinitionUtil;
 import i3po.inf191.xsd.DefResponse;
 
 import edu.harvard.i2b2.common.exception.I2B2Exception;
@@ -45,9 +44,7 @@ public class BasecodeToDefinitionHandler {
 		i3po.inf191.xsd.ObjectFactory myof = new i3po.inf191.xsd.ObjectFactory();
 		DefResponse response = myof.createDefResponse();
 		
-		try {
-			log.info("DB connection string: " + DefinitionUtil.getInstance().getConnectionString());
-			
+		try {			
 			umlsDefDAO = new DAOFactory().createUMLSDefDAO();
 			
 			if(encoding != null) {				

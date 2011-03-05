@@ -6,14 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public abstract class UMLSDefinitionDAO implements DEFDAO {
-	
-	public UMLSDefinitionDAO() { }
-	
-	
+	private Connection conn;
+
+	public UMLSDefinitionDAO(Connection conn){
+		this.conn = conn;
+	}
+
+
 	protected ResultSet runQuery(String queryString) throws SQLException
 	{
 		Statement stmt = getConnection().createStatement();
-		
+
 		ResultSet rs = stmt.executeQuery(queryString);
 
 		if(stmt.execute(queryString))
@@ -22,19 +25,31 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 		}
 		return rs;
 	}
-	
-	
-	private ResultSet runICD9toTitleQuery(String icd9) throws SQLException
+
+
+	/**
+	 * YOU SHOULD NOT CALL THIS DIRECTLY -- it is a hook method that must be
+	 * redefined in subclasses of UMLSDefinitionDAO.
+	 * 
+	 * It is called internally by getICD9Title(), so use that instead.
+	 */
+	public ResultSet runICD9toTitleQuery(String icd9) throws SQLException
 	{
 		throw new SQLException("Must override runICD9toTitleQuery() in subclass of UMLSDefinitionDAO");
 	}
-	
-	
-	private ResultSet runICD9toDefQuery(String icd9) throws SQLException
+
+
+	/**
+	 * YOU SHOULD NOT CALL THIS DIRECTLY -- it is a hook method that must be
+	 * redefined in subclasses of UMLSDefinitionDAO.
+	 * 
+	 * It is called internally by getICD9Definition(), so use that instead.
+	 */
+	public ResultSet runICD9toDefQuery(String icd9) throws SQLException
 	{
 		throw new SQLException("Must override runICD9toDefQuery() in subclass of UMLSDefinitionDAO"); 
 	}
-	
+
 
 	/**
 	 * For running queries against UMLS of the form icd9 --> term name.
@@ -48,8 +63,8 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 		ResultSet rs = runICD9toTitleQuery(icd9);
 		return rs.next() ? rs.getString("STR") : "";
 	}
-	
-	
+
+
 	/**
 	 * For running queries against UMLS of the form icd9 --> definition.
 	 * 
@@ -60,25 +75,15 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 		ResultSet rs = runICD9toDefQuery(icd9);
 		return rs.next() ? rs.getString("DEF") : "";
 	}
-	
-	
-	public Connection getConnection() {
-		return null;
-		/*
-		if(conn == null) {
-			throw new SQLException("Connection has not yet been initialized; " +
-			"call DEFDAO.establishDBConnection<connectionString>)");
-		}
-		else {
-			return conn;
-		}
-		*/
-	}
-	
-	public void setConnection(Connection conn) {
-		// TODO Auto-generated method stub
 
+
+	public Connection getConnection() {
+		return conn;
 	}
-	
+
+	public void setConnection(Connection conn) {
+		this.conn = conn;
+	}
+
 
 }
