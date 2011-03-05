@@ -102,7 +102,7 @@ public class TestDefinitionClient {
 
 	public static void main(String[] args) {
 		try {
-			OMElement payload = definitionPayload("/home/jordaniel/workspaces/i2b2/i3po/src/i3po/inf191/axis2/test.xml");//definitionPayload();
+			OMElement payload = definitionPayload("./src/i3po/inf191/axis2/test.xml");//definitionPayload();
 			Options options = new Options();
 			options.setTo(targetEPR);
 			options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
