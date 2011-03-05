@@ -7,6 +7,8 @@
 	<message_body>
 		<def:defRequest>
 			<basecode>ICD9:401</basecode>
+			<title>high blood pressure</title>
+			<!--<basecode>ICD9:401.1</basecode>-->
 		</def:defRequest>
 	</message_body>
 </i2b2:request>

@@ -1,17 +1,21 @@
 package i3po.inf191.delegate;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import i3po.inf191.dao.DAOFactory;
+import i3po.inf191.dao.IMODefinitionDAO;
 import i3po.inf191.dao.UMLSDefinitionDAO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import i3po.inf191.util.DefinitionUtil;
 import i3po.inf191.xsd.DefResponse;
+import i3po.inf191.xsd.Items.Item;
 
 import edu.harvard.i2b2.common.exception.I2B2Exception;
 import edu.harvard.i2b2.datavo.i2b2message.BodyType;
@@ -28,6 +32,7 @@ public class BasecodeToDefinitionHandler {
 	// Data Access Object for querying UMLS
 	private UMLSDefinitionDAO umlsDefDAO;
 	
+	
 	public BasecodeToDefinitionHandler(HashMap<String, String> params) {
 		log.info("In BasecodeToDefinitionHandler");
 		title = params.get("title");
@@ -42,19 +47,28 @@ public class BasecodeToDefinitionHandler {
 		BodyType bodyType = of.createBodyType();
 		
 		i3po.inf191.xsd.ObjectFactory myof = new i3po.inf191.xsd.ObjectFactory();
-		DefResponse response = myof.createDefResponse();
+		ArrayList<DefResponse> responses = new ArrayList<DefResponse>();
+		DefResponse firstResponse = myof.createDefResponse();
 		
 		try {			
 			umlsDefDAO = new DAOFactory().createUMLSDefDAO();
 			
-			if(encoding != null) {				
+			if(encoding != null && !("".equals(encoding))) {				
 				if(encoding.equals("ICD9")) {
 					if(title == null) {
 						title = umlsDefDAO.getICD9Title(code);
 					}
-					response.setTitle(title);
-					response.setBasecode(basecode);
-					response.setDefinition(umlsDefDAO.getICD9Definition(code));
+					firstResponse.setTitle(title);
+					firstResponse.setBasecode(basecode);
+					String definition = umlsDefDAO.getICD9Definition(code);
+					if(!definition.isEmpty()) {
+						firstResponse.setDefinition(definition);
+						responses.add(firstResponse);
+					}
+					else {
+						// If nothing found, do IMO search if possible
+						responses.addAll(performIMORequest());
+					}
 				}
 				else if(encoding.equals("LOINC")) {
 					//handle other encoding types this way
@@ -63,21 +77,43 @@ public class BasecodeToDefinitionHandler {
 					throw new I2B2Exception("Basecode type unrecognized");
 				}
 			}
-			else { //No basecode provided; either user typed just a title or dragged item had no basecode
-				// This is where we'd hand over to IMO...
+			else {
+				// No basecode provided; either user typed just a title or 
+				// dragged item had no basecode.
+				// Hand over to IMO if it is enabled
+				responses.addAll(performIMORequest());
 			}
 		}
 		catch (Exception sqe) {
-			//bodyType.getAny().add
-			response.setTitle(title == null ? "" : title);
-			response.setBasecode(basecode == null ? "" : basecode);
-			response.setDefinition(sqe.getLocalizedMessage());
+			firstResponse.setTitle(title == null ? "" : title);
+			firstResponse.setBasecode(basecode == null ? "" : basecode);
+			firstResponse.setDefinition(sqe.getLocalizedMessage());
 		}
 		
-		bodyType.getAny().add(response);
+		for(DefResponse response : responses) {
+			bodyType.getAny().add(response);
+		}
 		
 		assert bodyType != null;
 		return bodyType;
+	}
+
+
+	private ArrayList<DefResponse> performIMORequest() throws I2B2Exception {
+		ArrayList<DefResponse> toReturn = new ArrayList<DefResponse>();
+		
+		if(DefinitionUtil.getInstance().isIMOEnabled()) {
+			IMODefinitionDAO imoDefDAO = new DAOFactory().createIMODefDAO();
+			//TODO refactor; Leaky abstractions...
+			for(Item item : imoDefDAO.getIMOResults(title)) {
+				DefResponse newResponse = new DefResponse();
+				newResponse.setTitle(item.getTitle());
+				newResponse.setBasecode(item.getKndgCode());
+				newResponse.setDefinition(imoDefDAO.definitionFromPayload(item.getSearchpayload()));
+				toReturn.add(newResponse);
+			}
+		}
+		return toReturn;
 	}
 	
 	

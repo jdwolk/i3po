@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 
-import i3po.inf191.dao.DEFDAO;
+import i3po.inf191.dao.DAOFactory;
 import i3po.inf191.dao.UMLSDefinitionDAO;
 import i3po.inf191.delegate.BasecodeToDefinitionHandler;
 import i3po.inf191.util.DefinitionUtil;
@@ -21,6 +21,7 @@ public class UMLSDefinitionDAOTests {
 	
 	static DefinitionUtil.CONNECTIONS oldConnType = 
 		DefinitionUtil.getInstance().getConnectionType();
+	static DAOFactory factory;
 	
 	BasecodeToDefinitionHandler handler;
 	String icd9 = "401";
@@ -28,16 +29,18 @@ public class UMLSDefinitionDAOTests {
 	@BeforeClass
 	public static void setUpAll() throws Exception {
 		DefinitionUtil.getInstance().setConnectionType(DefinitionUtil.CONNECTIONS.LOCAL);
+		factory = new DAOFactory();
 	}
 	
 	@AfterClass
 	public static void restore() throws Exception {
 		DefinitionUtil.getInstance().setConnectionType(oldConnType);
+		factory = null;
 	}
 	
 	@Before
 	public void setUp() throws Exception {
-		defDAO = new UMLSDefinitionDAO();
+		defDAO = factory.createUMLSDefDAO();
 	}
 
 	@After

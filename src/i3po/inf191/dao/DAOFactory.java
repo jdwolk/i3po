@@ -14,6 +14,8 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.harvard.i2b2.common.exception.I2B2Exception;
+
 public class DAOFactory {
 	protected final Log log = LogFactory.getLog(getClass());
 
@@ -112,5 +114,10 @@ public class DAOFactory {
 		}
 		//util.setConnectionString(conn.getMetaData().getURL());
 		return dao;
+	}
+	
+	
+	public IMODefinitionDAO createIMODefDAO() throws I2B2Exception {
+		return new IMODefinitionDAO();
 	}
 }

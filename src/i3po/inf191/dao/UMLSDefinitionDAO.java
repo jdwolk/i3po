@@ -13,6 +13,13 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 	}
 
 
+	/**
+	 * YOU SHOULD NOT CALL THIS DIRECTLY EXCEPT WHEN OVERRIDING runICD9toTitleQuery() and
+	 * runICD9toDefQuery() in concrete cubclasses of UMLSDefinitionDAO.
+	 * 
+	 * @see {@link MySQL_UMLSDefinitionDAO}, {@link SQLServer_UMLSDefDAO} for examples
+	 * 
+	 */
 	protected ResultSet runQuery(String queryString) throws SQLException
 	{
 		Statement stmt = getConnection().createStatement();
@@ -33,7 +40,7 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 	 * 
 	 * It is called internally by getICD9Title(), so use that instead.
 	 */
-	public ResultSet runICD9toTitleQuery(String icd9) throws SQLException
+	protected ResultSet runICD9toTitleQuery(String icd9) throws SQLException
 	{
 		throw new SQLException("Must override runICD9toTitleQuery() in subclass of UMLSDefinitionDAO");
 	}
@@ -45,7 +52,7 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 	 * 
 	 * It is called internally by getICD9Definition(), so use that instead.
 	 */
-	public ResultSet runICD9toDefQuery(String icd9) throws SQLException
+	protected ResultSet runICD9toDefQuery(String icd9) throws SQLException
 	{
 		throw new SQLException("Must override runICD9toDefQuery() in subclass of UMLSDefinitionDAO"); 
 	}

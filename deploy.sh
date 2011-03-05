@@ -1,4 +1,5 @@
-xjc -d ./src ./src/DEF_QRY.xsd
+#xjc -d ./src ./src/DEF_QRY.xsd
+xjc -p i3po.inf191.xsd -d ./src ./src/
 cp ./lib/*.jar /opt/apache-tomcat-7.0.8/webapps/axis2/WEB-INF/lib
 cd ./bin/i3po/inf191/axis2/
 jar -cvf DefinitionService.aar ./*

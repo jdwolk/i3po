@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:import namespace="" />
+	
+  <xs:element name="items">
+    <xs:complexType>
+      <xs:sequence>
+        <!--<xs:element maxOccurs="unbounded" ref="item"/>-->
+        <xs:element name="item" maxOccurs="unbounded">
+    		<xs:complexType>
+      			<xs:attribute name="PERSON_HEALTH_TERM" use="required" type="xs:integer"/>
+      			<xs:attribute name="RELATIONSHIP_TYPE" use="required"/>
+      			<xs:attribute name="SCT_CONCEPT_ID" use="required" type="xs:integer"/>
+      			<xs:attribute name="SNOMED_DESCRIPTION" use="required"/>
+      			<xs:attribute name="code" use="required" type="xs:integer"/>
+      			<xs:attribute name="kndg_code" use="required" type="xs:NMTOKEN"/>
+      			<xs:attribute name="kndg_source" use="required" type="xs:NCName"/>
+      			<xs:attribute name="searchpayload" use="required"/>
+      			<xs:attribute name="title" use="required"/>
+    		</xs:complexType>
+  		</xs:element>
+      </xs:sequence>
+      <xs:attribute name="context" use="required" type="xs:NCName"/>
+      <xs:attribute name="datasetversion" use="required" type="xs:NCName"/>
+      <xs:attribute name="elapsed" use="required" type="xs:NMTOKEN"/>
+      <xs:attribute name="hardexpiration" use="required"/>
+      <xs:attribute name="inception" use="required"/>
+      <xs:attribute name="licenseexpiration" use="required"/>
+      <xs:attribute name="minversion" use="required" type="xs:NMTOKEN"/>
+      <xs:attribute name="searchmode" use="required" type="xs:NCName"/>
+      <xs:attribute name="searchstring" use="required"/>
+      <xs:attribute name="size" use="required" type="xs:integer"/>
+      <xs:attribute name="softexpiration" use="required"/>
+      <xs:attribute name="source" use="required" type="xs:NCName"/>
+      <xs:attribute name="totalsize" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  
+  
+  
+</xs:schema>
