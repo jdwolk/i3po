@@ -1,17 +1,16 @@
 package i3po.inf191.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class UMLSDefinitionDAO extends DEFDAO {
+public abstract class UMLSDefinitionDAO implements DEFDAO {
 	
-	public UMLSDefinitionDAO() {
-		super();
-	}
+	public UMLSDefinitionDAO() { }
 	
 	
-	private ResultSet runQuery(String queryString) throws SQLException
+	protected ResultSet runQuery(String queryString) throws SQLException
 	{
 		Statement stmt = getConnection().createStatement();
 		
@@ -27,17 +26,16 @@ public class UMLSDefinitionDAO extends DEFDAO {
 	
 	private ResultSet runICD9toTitleQuery(String icd9) throws SQLException
 	{
-		return runQuery("SELECT STR FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1;");
+		throw new SQLException("Must override runICD9toTitleQuery() in subclass of UMLSDefinitionDAO");
 	}
 	
 	
 	private ResultSet runICD9toDefQuery(String icd9) throws SQLException
 	{
-		return runQuery("SELECT DEF FROM MRDEF WHERE CUI LIKE" +
-		"(SELECT CUI FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1);"); 
+		throw new SQLException("Must override runICD9toDefQuery() in subclass of UMLSDefinitionDAO"); 
 	}
 	
-	//TODO refactor
+
 	/**
 	 * For running queries against UMLS of the form icd9 --> term name.
 	 * Note that the name/title returned is the UMLS title and not the
@@ -51,6 +49,7 @@ public class UMLSDefinitionDAO extends DEFDAO {
 		return rs.next() ? rs.getString("STR") : "";
 	}
 	
+	
 	/**
 	 * For running queries against UMLS of the form icd9 --> definition.
 	 * 
@@ -61,5 +60,25 @@ public class UMLSDefinitionDAO extends DEFDAO {
 		ResultSet rs = runICD9toDefQuery(icd9);
 		return rs.next() ? rs.getString("DEF") : "";
 	}
+	
+	
+	public Connection getConnection() {
+		return null;
+		/*
+		if(conn == null) {
+			throw new SQLException("Connection has not yet been initialized; " +
+			"call DEFDAO.establishDBConnection<connectionString>)");
+		}
+		else {
+			return conn;
+		}
+		*/
+	}
+	
+	public void setConnection(Connection conn) {
+		// TODO Auto-generated method stub
+
+	}
+	
 
 }

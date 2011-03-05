@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import i3po.inf191.dao.DAOFactory;
 import i3po.inf191.dao.UMLSDefinitionDAO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import i3po.inf191.util.DefinitionUtil;
 import i3po.inf191.xsd.DefResponse;
 
 import edu.harvard.i2b2.common.exception.I2B2Exception;
@@ -24,7 +27,7 @@ public class BasecodeToDefinitionHandler {
 	private String encoding; //i.e. ICD9, LOINC, etc. Derived from basecode.
 	
 	// Data Access Object for querying UMLS
-	private UMLSDefinitionDAO defDAO;
+	private UMLSDefinitionDAO umlsDefDAO;
 	
 	public BasecodeToDefinitionHandler(HashMap<String, String> params) {
 		log.info("In BasecodeToDefinitionHandler");
@@ -43,16 +46,18 @@ public class BasecodeToDefinitionHandler {
 		DefResponse response = myof.createDefResponse();
 		
 		try {
-			defDAO = new UMLSDefinitionDAO();
+			log.info("DB connection string: " + DefinitionUtil.getInstance().getConnectionString());
+			
+			umlsDefDAO = new DAOFactory().createUMLSDefDAO();
 			
 			if(encoding != null) {				
 				if(encoding.equals("ICD9")) {
 					if(title == null) {
-						title = defDAO.getICD9Title(code);
+						title = umlsDefDAO.getICD9Title(code);
 					}
 					response.setTitle(title);
 					response.setBasecode(basecode);
-					response.setDefinition(defDAO.getICD9Definition(code));
+					response.setDefinition(umlsDefDAO.getICD9Definition(code));
 				}
 				else if(encoding.equals("LOINC")) {
 					//handle other encoding types this way
