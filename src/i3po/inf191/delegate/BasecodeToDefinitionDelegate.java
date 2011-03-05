@@ -63,6 +63,7 @@ public class BasecodeToDefinitionDelegate extends RequestDelegate{
 			e.printStackTrace();
 		}
 		catch (edu.harvard.i2b2.common.util.jaxb.JAXBUtilException e) {
+			log.error("In delegateRequest of BasecodeToDefinitionRequest: " + e.getMessage());
 			e.printStackTrace();
 		}
 		catch (Exception e) {
