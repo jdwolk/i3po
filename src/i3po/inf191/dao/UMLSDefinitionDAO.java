@@ -27,14 +27,14 @@ public class UMLSDefinitionDAO extends DEFDAO {
 	
 	private ResultSet runICD9toTitleQuery(String icd9) throws SQLException
 	{
-		return runQuery("SELECT STR FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1");
+		return runQuery("SELECT STR FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1;");
 	}
 	
 	
 	private ResultSet runICD9toDefQuery(String icd9) throws SQLException
 	{
 		return runQuery("SELECT DEF FROM MRDEF WHERE CUI LIKE" +
-		"(SELECT CUI FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1)"); 
+		"(SELECT CUI FROM MRCONSO WHERE SAB='ICD9CM' AND CODE LIKE '" + icd9 + "' LIMIT 1);"); 
 	}
 	
 	//TODO refactor
