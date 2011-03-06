@@ -1,24 +1,29 @@
-i3po dictionary tool for i2b2
-----------------------------
+I3PO README
+-----------
 
-(Give some cool explanation here)
+The Integrated Informatics Implentation for Processing the Ontology (I3PO) is an addition to the I2B2 framework allowing for dictionary-like lookup of definitions for terms in the I2B2 ontology. It is packaged as a cell/webclient-plugin combination, and both components are necessary for its usage.
 
-JD's Lazy I-don't-wanna-install-ide-plugins-for-axis2-deployment Deployment Strategy
+These instructions assume that I3PO will be run in Apache Tomcat on a *nix-based operating system (tested on Ubuntu 10.04 & 10.10); deployment in another servlet container, while possible, is not covered in this document and requires additional steps specific to the container. Commands in the deploy.sh file can be easily adapted to your operating system of choice.
 
-	Currently using Axis2 via Tomcat. To deploy, go to axis2 directory of
-	/bin and 'jar -cvf DefinitionService.aar ./*' to create the service.
-	Move the DefinitionService.aar to your <APACHE_HOME>/webapps/axis2/WEB-INF/
-	services/ directory. Copy all .class files in /bin to appropriate places in
-	directory structure under <TOMCAT_HOME>/webapps/axis2/WEB-INF/
-	classes/ directory (i.e. 'cp -R ./* $APACHE_HOME/webapps/axis2/
-	WEB-INF/classes/'). Restart Tomcat and services should be up. You can test the
-	current service by running the java test (TestDefinitionClient.java).
-	
-	I've included a deploy.sh that accomplishes the above, though it's specific to
-	my directory structure. It'll stay that way until someone wants to generalize 
-	it by scripting it in python/ruby/perl/brainfuck/java, etc. (java? seriously, 
-	who scripts in java?)
-	
-TODO
-	Remember to include MySQL JDBC connector if running on a local machine
+
+Required Software
+-----------------
+
+- Java JDK
+	5.0 or higher is required; skip this if already installed
+
+	1. Download JDK from http://www.oracle.com/technetwork/java/javase/downloads/index.html or from
+		your system's pakage manager.  
+	2. Install the JDK into directory of your choice if you didn't use a package manager.
+	3. Set  $JAVA_HOME  environment  variable  to  point  to  the  installation  directory  (e.g., 
+		/usr/lib/jvm/java-1.6.0-openjdk).
+	4. Add $JAVA_HOME/bin to your PATH variable in your .bashrc or /etc/environment file (e.g., 
+		export PATH=$PATH:$JAVA_HOME/bin).
+
+- UMLS
+	The DEF Cell relies on the UMLS database for definition mapping. UMLS requires users to 
+	obtain a usage license.  Please obtain a UMLS license at http://umlsks.nlm.nih.gov.
+
+	1. Download files from http://www.nlm.nih.gov/research/umls/licensedcontent/umlsknowledgesources.html
+	2. 
 
