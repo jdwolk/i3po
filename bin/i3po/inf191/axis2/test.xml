@@ -6,7 +6,7 @@
 	<request_header>There</request_header>
 	<message_body>
 		<def:defRequest>
-			<basecode>ICD9:401</basecode>
+			<basecode></basecode>
 			<title>high blood pressure</title>
 			<!--<basecode>ICD9:401.1</basecode>-->
 		</def:defRequest>

@@ -95,8 +95,13 @@ public class IMODefinitionDAO implements DEFDAO {
 			Unmarshaller u = jc.createUnmarshaller();
 			Items itemsWrapper = (Items) u.unmarshal(new InputSource(new StringReader(queryResults)));
 			toReturn = itemsWrapper.getItem();
+			log.info(toReturn.size() + " definitions found via IMO");
 		}
 		catch (JAXBException e) {
+			log.error("JAXBException while unmarshalling IMO query: " + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return toReturn;
@@ -107,11 +112,12 @@ public class IMODefinitionDAO implements DEFDAO {
 		Pattern p = Pattern.compile(".*\\s-\\s\\w{1,3}\\.\\w{1,2}\\s-\\s(.+)");
 		Matcher m = p.matcher(payload);
 		if(m.find()) {
-			log.info("Definition found: " + m.group(1));
+			//log.info("Definition found: " + m.group(1));
 			return m.group(1);
 		}
 		else {
-			throw new RuntimeException("Regex was off while parsing IMO payload: " + payload);
+			log.error("Regex was off while parsing IMO payload: " + payload);
+			return payload;
 		}
 	}
 

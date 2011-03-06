@@ -3,6 +3,7 @@ package i3po.inf191.delegate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +56,7 @@ public class BasecodeToDefinitionHandler {
 			
 			if(encoding != null && !("".equals(encoding))) {				
 				if(encoding.equals("ICD9")) {
+					log.info("Performing UMLS request(s) from BasecodeToDefinitionHandler");
 					if(title == null) {
 						title = umlsDefDAO.getICD9Title(code);
 					}
@@ -88,12 +90,15 @@ public class BasecodeToDefinitionHandler {
 			firstResponse.setTitle(title == null ? "" : title);
 			firstResponse.setBasecode(basecode == null ? "" : basecode);
 			firstResponse.setDefinition(sqe.getLocalizedMessage());
+			responses.add(firstResponse);
 		}
-		
-		for(DefResponse response : responses) {
-			bodyType.getAny().add(response);
+		finally {
+			log.info("Adding responses to outgoing XML message");
+			for(DefResponse response : responses) {
+				bodyType.getAny().add(response);
+			}
 		}
-		
+
 		assert bodyType != null;
 		return bodyType;
 	}
@@ -103,9 +108,22 @@ public class BasecodeToDefinitionHandler {
 		ArrayList<DefResponse> toReturn = new ArrayList<DefResponse>();
 		
 		if(DefinitionUtil.getInstance().isIMOEnabled()) {
+			log.info("Performing IMO request from BasecodeToDefinitionHandler");
+			
 			IMODefinitionDAO imoDefDAO = new DAOFactory().createIMODefDAO();
+			List<Item> results;
+			//Try lookup by code first, then title
+			if(code != null) {
+				results = imoDefDAO.getIMOResults(code);
+			}
+			else if(title != null) {
+				results = imoDefDAO.getIMOResults(title);
+			}
+			else {
+				results = new ArrayList<Item>();
+			}
 			//TODO refactor; Leaky abstractions...
-			for(Item item : imoDefDAO.getIMOResults(title)) {
+			for(Item item :results ) {
 				DefResponse newResponse = new DefResponse();
 				newResponse.setTitle(item.getTitle());
 				newResponse.setBasecode(item.getKndgCode());
