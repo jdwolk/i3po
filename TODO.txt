@@ -1,3 +1,0 @@
-- generate classes from .xsd doc...what was the thing to do that again? WRITE IT DOWN
-
-- parse basecode?
