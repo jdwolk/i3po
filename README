@@ -1,7 +1,7 @@
 I3PO README
 -----------
 
-The Integrated Informatics Implentation for Processing the Ontology (I3PO) is an addition to the I2B2 framework allowing for dictionary-like lookup of definitions for terms in the I2B2 ontology. It is packaged as a cell/webclient-plugin combination, and both components are necessary for its usage.
+The Integrated Informatics Interface for Processing the Ontology (I3PO) is an addition to the I2B2 framework allowing for dictionary-like lookup of definitions for terms in the I2B2 ontology. It is packaged as a cell/webclient-plugin combination, and both components are necessary for its usage.
 
 These instructions assume that I3PO will be run in Apache Tomcat on a *nix-based operating system (tested on Ubuntu 10.04 & 10.10); deployment in another servlet container, while possible, is not covered in this document and requires additional steps specific to the container. Commands in the deploy.sh file can be easily adapted to your operating system of choice.
 
