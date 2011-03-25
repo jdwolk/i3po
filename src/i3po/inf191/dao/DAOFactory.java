@@ -25,20 +25,9 @@ public class DAOFactory {
 
 	
 	public UMLSDefinitionDAO createUMLSDefDAO() {
-		Connection conn;
 		UMLSDefinitionDAO toReturn = null;
 		try {
-			if(util.getConnectionType() ==  DefinitionUtil.CONNECTIONS.SERVER) {
-				conn = serverUMLSConnection();
-				toReturn = getCorrectUMLSDefDao(conn);
-			}
-			else if(util.getConnectionType() == DefinitionUtil.CONNECTIONS.LOCAL) {
-				conn = localUMLSConnection();
-				toReturn = getCorrectUMLSDefDao(conn);
-			}
-			else {
-				throw new SQLException("DB connectionType unknown in DAOFactory");
-			}
+			toReturn = getCorrectUMLSDefDao(getServerDataSource());
 		}
 		catch (SQLException e) {
 			log.error("Problem creating UMLSDefDAO(): " + e.getMessage());
@@ -49,70 +38,47 @@ public class DAOFactory {
 	}
 
 
-	private Connection serverUMLSConnection() {
-		Context initCtx = null;
-		Context envCtx = null;
+	private DataSource getServerDataSource() {
+		Context initCtx;
+		Context envCtx;
 		DataSource datasource = null;
-		Connection conn = null;
 
 		try {
 			initCtx = new InitialContext();
 			envCtx = (Context) initCtx.lookup("java:comp/env");
-			//!!! Presupposes a  <Resource name="jdbc/UMLS"> in Servlet container
-			datasource = (DataSource) envCtx.lookup("jdbc/UMLS");		
-
-			conn = datasource.getConnection();
-			
+			//!!! Presupposes a  <Resource name="jdbc/UMLS"> in Servlet container's context
+			datasource = (DataSource) envCtx.lookup("jdbc/UMLS");					
 		}
 		catch (NamingException e) {
 			e.printStackTrace();
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		assert conn!= null;
-		return conn;
+		assert datasource != null;
+		return datasource;
 	}
 
 
-	private Connection localUMLSConnection() {
-		Connection conn = null;
+	private UMLSDefinitionDAO getCorrectUMLSDefDao(DataSource ds) throws SQLException {
+		UMLSDefinitionDAO dao;
+
+		Connection testConnection = ds.getConnection();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(util.getConnectionString());
-			util.setConnectionString(conn.getMetaData().getURL());
+			String driverName = testConnection.getMetaData().getDriverName().toLowerCase();
+			log.info("JDBC Driver Name: " + driverName);
+			if(driverName.startsWith("mysql")) {
+				dao = new MySQL_UMLSDefDAO(ds);
+			}
+			else if(driverName.startsWith("microsoft sql server")) {
+				dao = new SQLServer_UMLSDefDAO(ds);
+			}
+			else {
+				throw new SQLException("JDBC Driver Name (" + driverName + ") was not recognized");
+			}
 		}
-		catch(ClassNotFoundException cnf) {
-			cnf.printStackTrace();
+		finally {
+			testConnection.close();
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		assert conn!= null;
-		return conn;
-	}
-
-
-	private UMLSDefinitionDAO getCorrectUMLSDefDao(Connection conn) throws SQLException {
-		UMLSDefinitionDAO dao = null;
-		String driverName = conn.getMetaData().getDriverName().toLowerCase();
-		log.info("JDBC Driver Name: " + driverName);
-
-		if(driverName.startsWith("mysql")) {
-			dao = new MySQL_UMLSDefDAO(conn);
-		}
-		else if(driverName.startsWith("microsoft sql server")) {
-			dao = new SQLServer_UMLSDefDAO(conn);
-		}
-		else {
-			throw new SQLException("JDBC Driver Name (" + driverName + ") was not recognized");
-		}
-		//util.setConnectionString(conn.getMetaData().getURL());
+	
 		return dao;
 	}
 	

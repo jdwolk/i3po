@@ -5,31 +5,56 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class UMLSDefinitionDAO implements DEFDAO {
-	private Connection conn;
+import javax.sql.DataSource;
 
-	public UMLSDefinitionDAO(Connection conn){
-		this.conn = conn;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public abstract class UMLSDefinitionDAO {
+	protected final Log log = LogFactory.getLog(getClass());
+	private DataSource ds;
+	private Connection currentConnection;
+
+	public UMLSDefinitionDAO(DataSource ds){
+		this.ds = ds;
 	}
 
 
+	private void establishConnection() {
+		log.info("Establishing db connection");
+		try {
+			if(currentConnection != null) {
+				log.info("db connection was not null");
+				closeConnection();
+			}
+			currentConnection = ds.getConnection();
+		}
+		catch(SQLException sqe) {
+			sqe.printStackTrace();
+		}
+	}
+
+
+	private void closeConnection() throws SQLException {
+		log.info("Closing db connection");
+		currentConnection.close();
+		currentConnection = null;
+	}
+	
 	/**
 	 * YOU SHOULD NOT CALL THIS DIRECTLY EXCEPT WHEN OVERRIDING runICD9toTitleQuery() and
-	 * runICD9toDefQuery() in concrete cubclasses of UMLSDefinitionDAO.
+	 * runICD9toDefQuery() in concrete subclasses of UMLSDefinitionDAO.
 	 * 
 	 * @see {@link MySQL_UMLSDefinitionDAO}, {@link SQLServer_UMLSDefDAO} for examples
 	 * 
 	 */
 	protected ResultSet runQuery(String queryString) throws SQLException
 	{
-		Statement stmt = getConnection().createStatement();
+		ResultSet rs;
+		establishConnection();
+		Statement stmt = currentConnection.createStatement();
+		rs = stmt.executeQuery(queryString);
 
-		ResultSet rs = stmt.executeQuery(queryString);
-
-		if(stmt.execute(queryString))
-		{
-			rs = stmt.getResultSet();
-		}
 		return rs;
 	}
 
@@ -67,8 +92,9 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 	 */
 	public String getICD9Title(String icd9) throws SQLException
 	{
+		log.info("Getting ICD9 title");
 		ResultSet rs = runICD9toTitleQuery(icd9);
-		return rs.next() ? rs.getString("STR") : "";
+		return handleResultSet(rs, "STR");
 	}
 
 
@@ -79,18 +105,18 @@ public abstract class UMLSDefinitionDAO implements DEFDAO {
 	 */
 	public String getICD9Definition(String icd9) throws SQLException
 	{
+		log.info("Getting ICD9 definition");
 		ResultSet rs = runICD9toDefQuery(icd9);
-		return rs.next() ? rs.getString("DEF") : "";
+		return handleResultSet(rs, "DEF");
 	}
-
-
-	public Connection getConnection() {
-		return conn;
+	
+	
+	private String handleResultSet(ResultSet rs, String toGet) throws SQLException{
+		String definition = rs.next() ? rs.getString(toGet) : "";
+		rs.getStatement().close();
+		rs.close();
+		closeConnection();
+		return definition;
 	}
-
-	public void setConnection(Connection conn) {
-		this.conn = conn;
-	}
-
 
 }

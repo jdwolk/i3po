@@ -1,13 +1,14 @@
 package i3po.inf191.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 public class MySQL_UMLSDefDAO extends UMLSDefinitionDAO {
 	
-	public MySQL_UMLSDefDAO(Connection conn) {
-		super(conn);
+	public MySQL_UMLSDefDAO(DataSource ds) {
+		super(ds);
 	}
 
 	// These values must be overridden so that the base class, UMLSDefinitionDAO, 
