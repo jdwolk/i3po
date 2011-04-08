@@ -87,10 +87,13 @@ public class BasecodeToDefinitionHandler {
 			}
 		}
 		catch (Exception sqe) {
+			sqe.printStackTrace();
+			/*
 			firstResponse.setTitle(title == null ? "" : title);
 			firstResponse.setBasecode(basecode == null ? "" : basecode);
-			firstResponse.setDefinition(sqe.getLocalizedMessage());
+			firstResponse.setDefinition("");
 			responses.add(firstResponse);
+			*/
 		}
 		finally {
 			log.info("Adding responses to outgoing XML message");
