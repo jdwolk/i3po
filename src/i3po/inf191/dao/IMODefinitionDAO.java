@@ -13,8 +13,6 @@ import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +28,7 @@ import org.xml.sax.InputSource;
 import edu.harvard.i2b2.common.exception.I2B2Exception;
 
 
-public class IMODefinitionDAO implements DEFDAO {
+public class IMODefinitionDAO {
 	private DefinitionUtil util = DefinitionUtil.getInstance();
 	private Log log = LogFactory.getLog(getClass());
 
@@ -41,7 +39,9 @@ public class IMODefinitionDAO implements DEFDAO {
 	}
 
 	public List<Item> getIMOResults(String query) {
-		return unMarshallIMOQuery(runIMOQuery(query));
+		String results = runIMOQuery(query);
+		log.info("IMO results for query '" + query + "':\n" + results);	
+		return unMarshallIMOQuery(results);
 	}
 
 
@@ -120,17 +120,4 @@ public class IMODefinitionDAO implements DEFDAO {
 			return payload;
 		}
 	}
-
-
-
-	@Override
-	public Connection getConnection() throws SQLException {
-		throw new UnsupportedOperationException("IMO does not maintain a database connection");
-	}
-
-	@Override
-	public void setConnection(Connection conn) {
-		throw new UnsupportedOperationException("IMO does not maintain a database connection");
-	}
-
 }
